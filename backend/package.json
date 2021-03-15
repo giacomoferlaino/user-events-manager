@@ -1,0 +1,14 @@
+{
+  "name": "whisbi-user-events",
+  "version": "1.0.0",
+  "description": "Simple events application where some users can create and post their events and other users can subscribe to them.",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/giacomoferlaino/whisbi-user-events.git"
+  },
+  "author": "Giacomo Ferlaino",
+  "license": "UNLICENSED"
+}
