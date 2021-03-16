@@ -6,7 +6,7 @@
     "format": "prettier --write \"src/**/*.ts\"",
     "build": "tsc",
     "start": "ts-node src/main.ts",
-    "debug": "node --inspect -r ts-node/register",
+    "debug": "node --inspect -r ts-node/register src/main.ts",
     "start:dev": "nodemon",
     "start:debug": "nodemon --exec \"npm run debug\"",
     "lint": "eslint \"{src}/**/*.ts\" --fix",
@@ -25,6 +25,8 @@
   "dependencies": {
     "body-parser": "^1.19.0",
     "express": "^4.17.1",
+    "http-status-codes": "^2.1.4",
+    "jwt-simple": "^0.5.6",
     "passport": "^0.4.1",
     "passport-jwt": "^4.0.0"
   },
