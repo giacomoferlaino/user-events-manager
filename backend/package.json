@@ -3,7 +3,18 @@
   "version": "1.0.0",
   "description": "Simple events application where some users can create and post their events and other users can subscribe to them.",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "format": "prettier --write \"src/**/*.ts\"",
+    "build": "tsc",
+    "start": "ts-node src/main.ts",
+    "debug": "node --inspect -r ts-node/register",
+    "start:dev": "nodemon",
+    "start:debug": "nodemon --exec \"npm run debug\"",
+    "lint": "eslint \"{src}/**/*.ts\" --fix",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:cov": "jest --coverage",
+    "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
+    "test:dev": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand --watch"
   },
   "repository": {
     "type": "git",
@@ -24,6 +35,7 @@
     "eslint-config-prettier": "^8.1.0",
     "eslint-plugin-prettier": "^3.3.1",
     "jest": "^26.6.3",
+    "nodemon": "^2.0.7",
     "prettier": "^2.2.1",
     "ts-jest": "^26.5.3",
     "ts-loader": "^8.0.18",
@@ -40,7 +52,7 @@
     "modulePaths": [
       "./"
     ],
-    "rootDir": "./",
+    "rootDir": "./src",
     "testRegex": ".*\\.spec\\.ts$",
     "transform": {
       "^.+\\.(t|j)s$": "ts-jest"
