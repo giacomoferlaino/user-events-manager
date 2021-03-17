@@ -12,10 +12,12 @@ import { Database } from './database';
 import { Connection } from 'typeorm';
 import { HttpErrorHandler } from './shared/http/http-error-handler';
 import { EventRouter } from './event/event-router';
+import { EventService } from './event/event-service';
 
 async function initServices(): Promise<void> {
   const dbConnection: Connection = await Database.createConnection();
   ServiceLocator.instance.register(new UserService(dbConnection));
+  ServiceLocator.instance.register(new EventService(dbConnection));
 }
 
 async function main(): Promise<void> {

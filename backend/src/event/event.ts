@@ -8,6 +8,15 @@ export class Event implements EntityConverter<EventEntity> {
   public readonly startDate: Date;
   public readonly location: string;
 
+  public static fromEntity(event: EventEntity): Event {
+    return new Event({ ...event });
+  }
+
+  public static fromObject(object: any): Event {
+    const eventEntity = EventEntity.fromObject(object);
+    return Event.fromEntity(eventEntity);
+  }
+
   constructor({ id, headline, description, startDate, location }: EventEntity) {
     this.id = id || 0;
     this.headline = headline || '';
