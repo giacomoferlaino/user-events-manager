@@ -20,20 +20,23 @@ export class UserService implements Service {
     return this._userRepository.save(user);
   }
 
-  public async findByID(id: number): Promise<User> {
-    const user = await this._userRepository.findOne({ id });
+  public async findByID(id: number, relations = ['events']): Promise<User> {
+    const user = await this._userRepository.findOne({ id }, { relations });
     if (!user) throw new UserNotFoundException();
     return user;
   }
 
-  public async findByEmail(email: string): Promise<User> {
-    const user = await this._userRepository.findOne({ email });
+  public async findByEmail(
+    email: string,
+    relations = ['events'],
+  ): Promise<User> {
+    const user = await this._userRepository.findOne({ email }, { relations });
     if (!user) throw new UserNotFoundException();
     return user;
   }
 
-  public async findAll(): Promise<User[]> {
-    return this._userRepository.find();
+  public async findAll(relations = ['events']): Promise<User[]> {
+    return this._userRepository.find({ relations });
   }
 
   public async updateByID(id: number, user: User): Promise<User> {

@@ -20,14 +20,14 @@ export class EventService implements Service {
     return this._eventRepository.save(event);
   }
 
-  public async findByID(id: number): Promise<Event> {
-    const event = await this._eventRepository.findOne({ id });
+  public async findByID(id: number, relations = ['author']): Promise<Event> {
+    const event = await this._eventRepository.findOne({ id }, { relations });
     if (!event) throw new EventNotFoundException();
     return event;
   }
 
-  public async findAll(): Promise<Event[]> {
-    return this._eventRepository.find();
+  public async findAll(relations = ['author']): Promise<Event[]> {
+    return this._eventRepository.find({ relations });
   }
 
   public async updateByID(id: number, event: Event): Promise<Event> {

@@ -1,5 +1,6 @@
 import { EventStates } from './event-states';
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { User } from '../user/user';
 
 @Entity()
 export class Event {
@@ -21,6 +22,9 @@ export class Event {
   @Column('varchar', { length: 20 })
   public readonly state: EventStates;
 
+  @ManyToOne((_) => User, (user) => user.events)
+  public readonly author: User;
+
   public static fromObject(object: any): Event {
     return new Event(
       object['id'] || 0,
@@ -29,6 +33,7 @@ export class Event {
       object['startDate'] || new Date(0),
       object['location'] || '',
       object['state'] || EventStates.Private,
+      object['author'],
     );
   }
 
@@ -39,6 +44,7 @@ export class Event {
     startDate: Date,
     location: string,
     state: EventStates,
+    author: User,
   ) {
     this.id = id;
     this.headline = headline;
@@ -46,6 +52,7 @@ export class Event {
     this.startDate = startDate;
     this.location = location;
     this.state = state;
+    this.author = author;
   }
 
   public mergeIn(event: Event): Event {
@@ -56,6 +63,7 @@ export class Event {
       event.startDate,
       event.location,
       event.state,
+      event.author,
     );
   }
 
@@ -67,6 +75,7 @@ export class Event {
       startDate: this.startDate,
       location: this.location,
       state: this.state,
+      author: this.author,
     };
   }
 

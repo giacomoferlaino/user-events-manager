@@ -3,6 +3,8 @@ import { ServiceLocator } from '../shared/service-locator/service-locator';
 import { ControllerHandler } from '../shared/http/types/controller-handler';
 import { Event } from './event';
 import { RequestContext } from '../shared/http/interfaces/request-context';
+import { User } from '../user/user';
+import { EventsLimitException } from './exceptions/events-limit-exception';
 
 export class EventController {
   private readonly _eventService: EventService;
@@ -28,7 +30,10 @@ export class EventController {
 
   public create(): ControllerHandler<Event> {
     return (context: RequestContext) => {
-      const eventData: number = context.req.body;
+      const user = context.req.user as User;
+      if (user.hasReachedEventsLimit()) throw new EventsLimitException();
+      const eventData: any = context.req.body;
+      eventData.author = context.req.user;
       const event: Event = Event.fromObject(eventData);
       return this._eventService.create(event);
     };

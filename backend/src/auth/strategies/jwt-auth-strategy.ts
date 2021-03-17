@@ -51,7 +51,7 @@ export class JwtAuthStrategy {
 
   public authenticate(): Handler {
     return (req: Request, res: Response, next: NextFunction) => {
-      authenticate(JwtAuthStrategy._ID, (err, user) => {
+      authenticate(JwtAuthStrategy._ID, (err: Error, user: User) => {
         if (err) {
           next(new UnauthorizedUserException());
           return;
