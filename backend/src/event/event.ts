@@ -1,5 +1,6 @@
 import { EntityConverter } from '../shared/orm/entity-converter';
 import { EventEntity } from './event-entity';
+import { EventStates } from './event-states';
 
 export class Event implements EntityConverter<EventEntity> {
   public readonly id: number;
@@ -7,6 +8,7 @@ export class Event implements EntityConverter<EventEntity> {
   public readonly description: string;
   public readonly startDate: Date;
   public readonly location: string;
+  public readonly state: EventStates;
 
   public static fromEntity(event: EventEntity): Event {
     return new Event({ ...event });
@@ -17,12 +19,20 @@ export class Event implements EntityConverter<EventEntity> {
     return Event.fromEntity(eventEntity);
   }
 
-  constructor({ id, headline, description, startDate, location }: EventEntity) {
+  constructor({
+    id,
+    headline,
+    description,
+    startDate,
+    location,
+    state,
+  }: EventEntity) {
     this.id = id || 0;
     this.headline = headline || '';
     this.description = description || '';
     this.startDate = startDate || new Date(0);
     this.location = location || '';
+    this.state = state || EventStates.Private;
   }
 
   public mergeIn(event: Event): Event {
