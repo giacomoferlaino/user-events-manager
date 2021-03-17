@@ -20,7 +20,10 @@ export class UserService implements Service {
     return this._userRepository.save(user);
   }
 
-  public async findByID(id: number, relations = ['events']): Promise<User> {
+  public async findByID(
+    id: number,
+    relations = ['events', 'subscribedEvents'],
+  ): Promise<User> {
     const user = await this._userRepository.findOne({ id }, { relations });
     if (!user) throw new UserNotFoundException();
     return user;
@@ -28,14 +31,16 @@ export class UserService implements Service {
 
   public async findByEmail(
     email: string,
-    relations = ['events'],
+    relations = ['events', 'subscribedEvents'],
   ): Promise<User> {
     const user = await this._userRepository.findOne({ email }, { relations });
     if (!user) throw new UserNotFoundException();
     return user;
   }
 
-  public async findAll(relations = ['events']): Promise<User[]> {
+  public async findAll(
+    relations = ['events', 'subscribedEvents'],
+  ): Promise<User[]> {
     return this._userRepository.find({ relations });
   }
 

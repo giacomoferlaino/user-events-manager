@@ -28,7 +28,9 @@ Content-Type: application/json
 Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VySUQiOjF9.mRTZ7R4Klaok23JbdAHBKJHvlfngPlm_SAr7ufrT8c4
 
 {
-  "username": "changedUser"
+  "username": "testUser",
+  "password": "password",
+  "email": "user@test.com"
 }
 
 ###

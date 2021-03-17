@@ -40,6 +40,11 @@ export class EventRouter implements Router {
       JwtAuthStrategy.instance.authenticate(),
       new JsonHandler(this._eventController.remove()).get(),
     );
+    this._router.post(
+      '/:id/subscribe',
+      JwtAuthStrategy.instance.authenticate(),
+      new JsonHandler(this._eventController.subscribe()).get(),
+    );
     return this;
   }
 }

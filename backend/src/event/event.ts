@@ -1,5 +1,11 @@
 import { EventStates } from './event-states';
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  ManyToMany,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 import { User } from '../user/user';
 
 @Entity()
@@ -25,6 +31,9 @@ export class Event {
   @ManyToOne((_) => User, (user) => user.events)
   public readonly author: User;
 
+  @ManyToMany((_) => User, (user) => user.subscribedEvents)
+  public readonly subscribers: User[];
+
   public static fromObject(object: any): Event {
     return new Event(
       object['id'] || 0,
@@ -34,6 +43,7 @@ export class Event {
       object['location'] || '',
       object['state'] || EventStates.Private,
       object['author'],
+      object['subscribers'] || [],
     );
   }
 
@@ -45,6 +55,7 @@ export class Event {
     location: string,
     state: EventStates,
     author: User,
+    subscribers: User[],
   ) {
     this.id = id;
     this.headline = headline;
@@ -53,6 +64,7 @@ export class Event {
     this.location = location;
     this.state = state;
     this.author = author;
+    this.subscribers = subscribers;
   }
 
   public mergeIn(event: Event): Event {
@@ -64,6 +76,7 @@ export class Event {
       event.location,
       event.state,
       event.author,
+      event.subscribers,
     );
   }
 
@@ -76,10 +89,11 @@ export class Event {
       location: this.location,
       state: this.state,
       author: this.author,
+      subscribers: this.subscribers,
     };
   }
 
   public toJSON(): any {
-    return { ...this.toObject(), author: undefined };
+    return { ...this.toObject(), author: undefined, subscribers: undefined };
   }
 }

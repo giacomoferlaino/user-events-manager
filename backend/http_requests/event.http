@@ -5,7 +5,8 @@ Content-Type: application/json
 
 POST http://localhost:8080/event/ HTTP/1.1
 Content-Type: application/json
-Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VySUQiOjF9.mRTZ7R4Klaok23JbdAHBKJHvlfngPlm_SAr7ufrT8c4
+#Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VySUQiOjF9.mRTZ7R4Klaok23JbdAHBKJHvlfngPlm_SAr7ufrT8c4
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VySUQiOjN9.JVeDY51pi4KYLDiAyMIcQT0QomK2ioft6iTvV7mKTM0
 
 
 {
@@ -26,11 +27,19 @@ Content-Type: application/json
 Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VySUQiOjF9.mRTZ7R4Klaok23JbdAHBKJHvlfngPlm_SAr7ufrT8c4
 
 {
-  "username": "changedUser"
+  "headline": "New event",
+  "location": "Milan",
+  "state": "public"
 }
 
 ###
 
 DELETE http://localhost:8080/event/2
+Content-Type: application/json
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VySUQiOjF9.mRTZ7R4Klaok23JbdAHBKJHvlfngPlm_SAr7ufrT8c4
+
+###
+
+POST http://localhost:8080/event/10/subscribe
 Content-Type: application/json
 Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VySUQiOjF9.mRTZ7R4Klaok23JbdAHBKJHvlfngPlm_SAr7ufrT8c4

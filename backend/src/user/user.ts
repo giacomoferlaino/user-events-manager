@@ -1,9 +1,17 @@
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinTable,
+  ManyToMany,
+  OneToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 import { Event } from '../event/event';
 
 @Entity()
 export class User {
   private readonly EVENTS_LIMIT: number = 1;
+  private readonly SUBSCRIPTIONS_LIMIT: number = 3;
 
   @PrimaryGeneratedColumn()
   public readonly id: number;
@@ -20,6 +28,10 @@ export class User {
   @OneToMany((_) => Event, (event) => event.author)
   public readonly events: Event[];
 
+  @ManyToMany((_) => Event, (event) => event.subscribers)
+  @JoinTable()
+  public readonly subscribedEvents: Event[];
+
   public static fromObject(object: any): User {
     return new User(
       object['id'] || 0,
@@ -27,6 +39,7 @@ export class User {
       object['email'] || '',
       object['password'] || '',
       object['events'] || [],
+      object['subscribedEvents'] || [],
     );
   }
 
@@ -36,12 +49,14 @@ export class User {
     email: string,
     password: string,
     events: Event[],
+    subscribedEvents: Event[],
   ) {
     this.id = id;
     this.username = username;
     this.email = email;
     this.password = password;
     this.events = events;
+    this.subscribedEvents = subscribedEvents;
   }
 
   public mergeIn(user: User): User {
@@ -51,6 +66,7 @@ export class User {
       user.email,
       user.password,
       user.events,
+      user.subscribedEvents,
     );
   }
 
@@ -63,8 +79,22 @@ export class User {
     return !isWithinLimits;
   }
 
+  public hasReachedSubscriptionsLimit(): boolean {
+    const isWithinLimits: boolean =
+      this.subscribedEvents.length < this.SUBSCRIPTIONS_LIMIT;
+    return !isWithinLimits;
+  }
+
+  public subscribe(event: Event): void {
+    this.subscribedEvents.push(event);
+  }
+
   public isEventOwner(eventID: number): boolean {
     return this.events.some((event: Event) => event.id === eventID);
+  }
+
+  public isSubscribed(eventID: number): boolean {
+    return this.subscribedEvents.some((event: Event) => event.id === eventID);
   }
 
   public toObject(): any {
@@ -74,6 +104,7 @@ export class User {
       email: this.email,
       password: this.password,
       events: this.events,
+      subscribedEvents: this.subscribedEvents,
     };
   }
 
