@@ -18,6 +18,14 @@ export class User implements EntityConverter<UserEntity> {
     this._password = password || '';
   }
 
+  public getID(): number {
+    return this._id;
+  }
+
+  public comparePassword(password: string): boolean {
+    return this._password === password;
+  }
+
   public toEntity(): UserEntity {
     return UserEntity.fromObject(this.toObject());
   }

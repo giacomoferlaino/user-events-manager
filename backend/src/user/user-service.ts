@@ -28,6 +28,12 @@ export class UserService implements Service {
     return User.fromEntity(userEntity);
   }
 
+  public async findByEmail(email: string): Promise<User> {
+    const userEntity = await this._userRepository.findOne({ email });
+    if (!userEntity) throw new UserNotFoundException();
+    return User.fromEntity(userEntity);
+  }
+
   public async findAll(): Promise<User[]> {
     const userEntities = await this._userRepository.find();
     return userEntities.map<User>((userEntity) => User.fromEntity(userEntity));

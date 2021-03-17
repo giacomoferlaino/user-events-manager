@@ -1,6 +1,7 @@
 import express from 'express';
 import { Router } from '../shared/router';
 import { AuthController } from './auth-controller';
+import { JsonHandler } from '../shared/http/json-handler';
 
 export class AuthRouter implements Router {
   private readonly _router: express.Router = express.Router();
@@ -15,7 +16,10 @@ export class AuthRouter implements Router {
   }
 
   public initRoutes(): Router {
-    this._router.post('/login', this._authController.login());
+    this._router.post(
+      '/login',
+      new JsonHandler(this._authController.login()).get(),
+    );
     return this;
   }
 }
