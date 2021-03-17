@@ -1,0 +1,17 @@
+version: "3.9"
+
+services:
+  database:
+    image: mysql
+    command: --default-authentication-plugin=mysql_native_password
+    restart: on-failure
+    environment:
+      MYSQL_ROOT_PASSWORD: securePassword
+      MYSQL_DATABASE: userEvents
+    volumes:
+      - database-data:/var/lib/mysql
+    ports:
+      - 3306:3306
+
+volumes:
+  database-data:
