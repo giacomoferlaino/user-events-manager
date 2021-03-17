@@ -63,6 +63,10 @@ export class User {
     return !isWithinLimits;
   }
 
+  public isEventOwner(eventID: number): boolean {
+    return this.events.some((event: Event) => event.id === eventID);
+  }
+
   public toObject(): any {
     return {
       id: this.id,

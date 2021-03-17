@@ -5,6 +5,7 @@ import { Event } from './event';
 import { RequestContext } from '../shared/http/interfaces/request-context';
 import { User } from '../user/user';
 import { EventsLimitException } from './exceptions/events-limit-exception';
+import { UnauthorizedUserException } from '../auth/exceptions/unauthorized-user-exception';
 
 export class EventController {
   private readonly _eventService: EventService;
@@ -42,14 +43,18 @@ export class EventController {
   public update(): ControllerHandler<Event> {
     return (context: RequestContext) => {
       const eventID: number = parseInt(context.req.params['id']);
+      const user = context.req.user as User;
+      if (!user.isEventOwner(eventID)) throw new UnauthorizedUserException();
       const eventData: number = context.req.body;
-      const event: Event = Event.fromObject(eventData);
-      return this._eventService.updateByID(eventID, event);
+      const updatedEvent: Event = Event.fromObject(eventData);
+      return this._eventService.updateByID(eventID, updatedEvent);
     };
   }
   public remove(): ControllerHandler<void> {
     return (context: RequestContext) => {
       const eventID: number = parseInt(context.req.params['id']);
+      const user = context.req.user as User;
+      if (!user.isEventOwner(eventID)) throw new UnauthorizedUserException();
       return this._eventService.removeByID(eventID);
     };
   }

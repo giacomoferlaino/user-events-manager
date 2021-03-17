@@ -8,6 +8,7 @@ import { UserService } from '../user/user-service';
 import { ServiceLocator } from '../shared/service-locator/service-locator';
 import { InvalidCredentialsException } from './exceptions/invalid-credentials-exception';
 import { User } from '../user/user';
+import { JwtAuthStrategy } from './strategies/jwt-auth-strategy';
 
 export class AuthController {
   private readonly _userService: UserService;
@@ -29,7 +30,8 @@ export class AuthController {
         userID: user.id,
       };
       const authToken: string = encode(payload, Environment.jwtSecret());
-      return new AuthData(authToken);
+      const authTokenWithSchema = `${JwtAuthStrategy.schema} ${authToken}`;
+      return new AuthData(authTokenWithSchema);
     };
   }
 
