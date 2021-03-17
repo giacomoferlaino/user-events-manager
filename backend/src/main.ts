@@ -11,6 +11,7 @@ import { Passport } from './passport';
 import { Database } from './database';
 import { Connection } from 'typeorm';
 import { HttpErrorHandler } from './shared/http/http-error-handler';
+import { EventRouter } from './event/event-router';
 
 async function initServices(): Promise<void> {
   const dbConnection: Connection = await Database.createConnection();
@@ -35,6 +36,11 @@ async function main(): Promise<void> {
     '/user',
     JwtAuthStrategy.instance.authenticate(),
     new UserRouter().initRoutes().get(),
+  );
+  app.use(
+    '/event',
+    JwtAuthStrategy.instance.authenticate(),
+    new EventRouter().initRoutes().get(),
   );
   app.use('/auth', new AuthRouter().initRoutes().get());
   app.use(new HttpErrorHandler().get());
