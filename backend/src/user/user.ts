@@ -3,7 +3,7 @@ import { Event } from '../event/event';
 
 @Entity()
 export class User {
-  private readonly EVENTS_LIMIT: number = 3;
+  private readonly EVENTS_LIMIT: number = 1;
 
   @PrimaryGeneratedColumn()
   public readonly id: number;
