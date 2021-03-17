@@ -31,7 +31,8 @@ export class UserController {
     return (context: RequestContext) => {
       const body: number = context.req.body;
       const userEntity: UserEntity = UserEntity.fromObject(body);
-      return this._userService.create(userEntity);
+      const user: User = User.fromEntity(userEntity);
+      return this._userService.create(user);
     };
   }
 

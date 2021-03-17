@@ -17,8 +17,8 @@ export class UserService implements Service {
     return UserService.ID;
   }
 
-  public async create(user: UserEntity) {
-    const userEntity = await this._userRepository.save(user);
+  public async create(user: User) {
+    const userEntity = await this._userRepository.save(user.toEntity());
     return User.fromEntity(userEntity);
   }
 
