@@ -4,7 +4,9 @@ import { UserService } from '../../user/user-service';
 import { ServiceLocator } from '../../shared/service-locator/service-locator';
 import { User } from '../../user/user';
 import { Environment } from '../../shared/environment/environment';
-import { Handler } from 'express';
+import { Handler, NextFunction, Request, Response } from 'express';
+import { UnauthorizedUserException } from '../exceptions/unauthorized-user-exception';
+import { JwtPayload } from './jwt-payload';
 
 export class JwtAuthStrategy {
   public static schema: string = 'Bearer';
@@ -35,8 +37,8 @@ export class JwtAuthStrategy {
   public get(): Strategy {
     return new passportJWT.Strategy(
       this._strategyOptions,
-      async (payload, done) => {
-        const userID: string = payload.id;
+      async (payload: JwtPayload, done) => {
+        const userID: number = payload.userID;
         try {
           const user: User = await this._userService.findByID(userID);
           return done(null, user);
@@ -48,6 +50,19 @@ export class JwtAuthStrategy {
   }
 
   public authenticate(): Handler {
-    return authenticate(JwtAuthStrategy._ID);
+    return (req: Request, res: Response, next: NextFunction) => {
+      authenticate(JwtAuthStrategy._ID, (err, user) => {
+        if (err) {
+          next(new UnauthorizedUserException());
+          return;
+        }
+        if (!user) {
+          next(new UnauthorizedUserException());
+          return;
+        }
+        req.user = user;
+        next();
+      })(req, res, next);
+    };
   }
 }

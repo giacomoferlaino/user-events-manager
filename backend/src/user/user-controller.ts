@@ -1,6 +1,9 @@
-import { Handler, NextFunction, Request, Response } from 'express';
 import { UserService } from './user-service';
 import { ServiceLocator } from '../shared/service-locator/service-locator';
+import { UserEntity } from './user-entity';
+import { User } from './user';
+import { RequestContext } from '../shared/http/interfaces/request-context';
+import { ControllerHandler } from '../shared/http/types/controller-handler';
 
 export class UserController {
   private readonly _userService: UserService;
@@ -10,14 +13,32 @@ export class UserController {
       UserService.ID,
     ) as UserService;
   }
-  public findOne(): Handler {
-    return async (
-      req: Request,
-      res: Response,
-      next: NextFunction,
-    ): Promise<void> => {
-      const userID: string = req.params['id'];
-      res.json(await this._userService.findByID(userID));
+
+  public findOne(): ControllerHandler<User> {
+    return (context: RequestContext) => {
+      const userID: number = parseInt(context.req.params['id']);
+      return this._userService.findByID(userID);
+    };
+  }
+
+  public findAll(): ControllerHandler<User[]> {
+    return (_: RequestContext) => {
+      return this._userService.findAll();
+    };
+  }
+
+  public create(): ControllerHandler<User> {
+    return (context: RequestContext) => {
+      const body: number = context.req.body;
+      const userEntity: UserEntity = UserEntity.fromObject(body);
+      return this._userService.create(userEntity);
+    };
+  }
+
+  public remove(): ControllerHandler<void> {
+    return (context: RequestContext) => {
+      const userID: number = parseInt(context.req.params['id']);
+      return this._userService.removeByID(userID);
     };
   }
 }

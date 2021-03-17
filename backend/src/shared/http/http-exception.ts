@@ -1,5 +1,7 @@
+import { StatusCodes } from 'http-status-codes';
+
 export class HttpException extends Error {
-  constructor(public message: string, public statusCode: number) {
+  constructor(public message: string, public statusCode: StatusCodes) {
     super(message);
   }
 
