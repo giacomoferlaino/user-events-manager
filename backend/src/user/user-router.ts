@@ -28,7 +28,7 @@ export class UserRouter implements Router {
       '/:id',
       new JsonHandler(this._userController.findOne()).get(),
     );
-    this._router.patch(
+    this._router.put(
       '/:id',
       new JsonHandler(this._userController.update()).get(),
     );

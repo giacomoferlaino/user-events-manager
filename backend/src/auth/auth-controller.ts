@@ -37,7 +37,7 @@ export class AuthController {
     return async (context: RequestContext) => {
       const email: string = context.req.body['email'];
       const password: string = context.req.body['password'];
-      const user = new User({ email, password });
+      const user = User.fromObject({ email, password });
       return this._userService.create(user);
     };
   }

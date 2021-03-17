@@ -1,43 +1,41 @@
-import { EntityConverter } from '../shared/orm/entity-converter';
-import { UserEntity } from './user-entity';
+import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
-export class User implements EntityConverter<UserEntity> {
+@Entity()
+export class User {
+  @PrimaryGeneratedColumn()
   public readonly id: number;
+
+  @Column()
   public readonly username: string;
+
+  @Column()
   public readonly email: string;
+
+  @Column()
   public readonly password: string;
 
-  public static fromEntity(entity: UserEntity): User {
-    return new User({ ...entity });
-  }
-
   public static fromObject(object: any): User {
-    const userEntity = UserEntity.fromObject(object);
-    return User.fromEntity(userEntity);
+    return new User(
+      object['id'] || 0,
+      object['username'] || '',
+      object['email'] || '',
+      object['password'] || '',
+    );
   }
 
-  constructor({ id, username, email, password }: UserEntity) {
-    this.id = id || 0;
-    this.username = username || '';
-    this.email = email || '';
-    this.password = password || '';
+  constructor(id: number, username: string, email: string, password: string) {
+    this.id = id;
+    this.username = username;
+    this.email = email;
+    this.password = password;
   }
 
   public mergeIn(user: User): User {
-    return new User({
-      id: user.id === 0 ? this.id : user.id,
-      username: user.username === '' ? this.username : user.username,
-      email: user.email === '' ? this.email : user.email,
-      password: user.password === '' ? this.password : user.password,
-    });
+    return new User(this.id, user.username, user.email, user.password);
   }
 
   public comparePassword(password: string): boolean {
     return this.password === password;
-  }
-
-  public toEntity(): UserEntity {
-    return UserEntity.fromObject(this.toObject());
   }
 
   public toObject(): any {

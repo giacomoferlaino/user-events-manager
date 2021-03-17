@@ -1,10 +1,8 @@
 import { Connection, Repository } from 'typeorm';
-import { EventEntity } from './event-entity';
+import { Event } from './event';
 
 export class EventRepository {
-  public static fromConnection(
-    dbConnection: Connection,
-  ): Repository<EventEntity> {
-    return dbConnection.getRepository(EventEntity);
+  public static fromConnection(dbConnection: Connection): Repository<Event> {
+    return dbConnection.getRepository(Event);
   }
 }

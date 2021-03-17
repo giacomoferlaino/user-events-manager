@@ -1,13 +1,12 @@
 import { Service } from '../shared/service-locator/service';
 import { Connection, Repository } from 'typeorm';
-import { EventEntity } from './event-entity';
 import { EventRepository } from './event-repository';
 import { Event } from './event';
 import { EventNotFoundException } from './exceptions/event-not-found-exception';
 
 export class EventService implements Service {
   public static ID: string = 'EVENT_SERVICE';
-  private readonly _eventRepository: Repository<EventEntity>;
+  private readonly _eventRepository: Repository<Event>;
 
   constructor(dbConnection: Connection) {
     this._eventRepository = EventRepository.fromConnection(dbConnection);
@@ -18,33 +17,27 @@ export class EventService implements Service {
   }
 
   public async create(event: Event) {
-    const eventEntity = await this._eventRepository.save(event.toEntity());
-    return Event.fromEntity(eventEntity);
+    return this._eventRepository.save(event);
   }
 
   public async findByID(id: number): Promise<Event> {
-    const eventEntity = await this._eventRepository.findOne({ id });
-    if (!eventEntity) throw new EventNotFoundException();
-    return Event.fromEntity(eventEntity);
+    const event = await this._eventRepository.findOne({ id });
+    if (!event) throw new EventNotFoundException();
+    return event;
   }
 
   public async findAll(): Promise<Event[]> {
-    const eventEntities = await this._eventRepository.find();
-    return eventEntities.map<Event>((eventEntity) =>
-      Event.fromEntity(eventEntity),
-    );
+    return this._eventRepository.find();
   }
 
   public async updateByID(id: number, event: Event): Promise<Event> {
     const existingEvent = await this.findByID(id); // checks if event exists
     const updatedEvent = existingEvent.mergeIn(event);
-    const updatedEventEntity = await this._eventRepository.save(
-      updatedEvent.toEntity(),
-    );
-    return Event.fromEntity(updatedEventEntity);
+    return this._eventRepository.save(updatedEvent);
   }
 
   public async removeByID(id: number): Promise<void> {
-    await this._eventRepository.remove({ id });
+    const event = await this.findByID(id);
+    await this._eventRepository.remove(event);
   }
 }
