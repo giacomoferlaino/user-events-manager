@@ -1,8 +1,9 @@
 import { createConnection } from 'typeorm';
 import { UserEntity } from './user/user-entity';
+import { EventEntity } from './event/event-entity';
 
 export class Database {
-  public static async createConnecion() {
+  public static async createConnection() {
     return createConnection({
       type: 'mysql',
       host: 'localhost',
@@ -10,7 +11,7 @@ export class Database {
       username: 'root',
       password: 'securePassword',
       database: 'userEvents',
-      entities: [UserEntity],
+      entities: [UserEntity, EventEntity],
       synchronize: true,
       logging: false,
     });

@@ -13,7 +13,7 @@ import { Connection } from 'typeorm';
 import { HttpErrorHandler } from './shared/http/http-error-handler';
 
 async function initServices(): Promise<void> {
-  const dbConnection: Connection = await Database.createConnecion();
+  const dbConnection: Connection = await Database.createConnection();
   ServiceLocator.instance.register(new UserService(dbConnection));
 }
 
