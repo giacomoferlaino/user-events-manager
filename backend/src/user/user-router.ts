@@ -28,6 +28,10 @@ export class UserRouter implements Router {
       '/:id',
       new JsonHandler(this._userController.findOne()).get(),
     );
+    this._router.patch(
+      '/:id',
+      new JsonHandler(this._userController.update()).get(),
+    );
     this._router.delete(
       '/:id',
       new JsonHandler(this._userController.remove()).get(),

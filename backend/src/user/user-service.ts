@@ -39,6 +39,15 @@ export class UserService implements Service {
     return userEntities.map<User>((userEntity) => User.fromEntity(userEntity));
   }
 
+  public async updateByID(id: number, user: User): Promise<User> {
+    const existingUser = await this.findByID(id); // checks if user exists
+    const updatedUser = existingUser.mergeIn(user);
+    const updatedUserEntity = await this._userRepository.save(
+      updatedUser.toEntity(),
+    );
+    return User.fromEntity(updatedUserEntity);
+  }
+
   public async removeByID(id: number): Promise<void> {
     await this._userRepository.remove({ id });
   }

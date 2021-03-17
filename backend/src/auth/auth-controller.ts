@@ -26,7 +26,7 @@ export class AuthController {
       if (!user.comparePassword(password))
         throw new InvalidCredentialsException();
       const payload: JwtPayload = {
-        userID: user.getID(),
+        userID: user.id,
       };
       const authToken: string = encode(payload, Environment.jwtSecret());
       return new AuthData(authToken);

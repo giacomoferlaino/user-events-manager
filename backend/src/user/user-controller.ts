@@ -1,6 +1,5 @@
 import { UserService } from './user-service';
 import { ServiceLocator } from '../shared/service-locator/service-locator';
-import { UserEntity } from './user-entity';
 import { User } from './user';
 import { RequestContext } from '../shared/http/interfaces/request-context';
 import { ControllerHandler } from '../shared/http/types/controller-handler';
@@ -29,13 +28,20 @@ export class UserController {
 
   public create(): ControllerHandler<User> {
     return (context: RequestContext) => {
-      const body: number = context.req.body;
-      const userEntity: UserEntity = UserEntity.fromObject(body);
-      const user: User = User.fromEntity(userEntity);
+      const userData: number = context.req.body;
+      const user: User = User.fromObject(userData);
       return this._userService.create(user);
     };
   }
 
+  public update(): ControllerHandler<User> {
+    return (context: RequestContext) => {
+      const userID: number = parseInt(context.req.params['id']);
+      const userData: number = context.req.body;
+      const user: User = User.fromObject(userData);
+      return this._userService.updateByID(userID, user);
+    };
+  }
   public remove(): ControllerHandler<void> {
     return (context: RequestContext) => {
       const userID: number = parseInt(context.req.params['id']);
