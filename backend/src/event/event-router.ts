@@ -2,6 +2,7 @@ import express from 'express';
 import { Router } from '../shared/router';
 import { EventController } from './event-controller';
 import { JsonHandler } from '../shared/http/json-handler';
+import { JwtAuthStrategy } from '../auth/strategies/jwt-auth-strategy';
 
 export class EventRouter implements Router {
   private readonly _router: express.Router = express.Router();
@@ -22,18 +23,21 @@ export class EventRouter implements Router {
     );
     this._router.post(
       '/',
+      JwtAuthStrategy.instance.authenticate(),
       new JsonHandler(this._eventController.create()).get(),
     );
     this._router.get(
       '/:id',
       new JsonHandler(this._eventController.findOne()).get(),
     );
-    this._router.patch(
+    this._router.put(
       '/:id',
+      JwtAuthStrategy.instance.authenticate(),
       new JsonHandler(this._eventController.update()).get(),
     );
     this._router.delete(
       '/:id',
+      JwtAuthStrategy.instance.authenticate(),
       new JsonHandler(this._eventController.remove()).get(),
     );
     return this;

@@ -80,6 +80,6 @@ export class Event {
   }
 
   public toJSON(): any {
-    return this.toObject();
+    return { ...this.toObject(), author: undefined };
   }
 }

@@ -39,11 +39,7 @@ async function main(): Promise<void> {
     JwtAuthStrategy.instance.authenticate(),
     new UserRouter().initRoutes().get(),
   );
-  app.use(
-    '/event',
-    JwtAuthStrategy.instance.authenticate(),
-    new EventRouter().initRoutes().get(),
-  );
+  app.use('/event', new EventRouter().initRoutes().get());
   app.use('/auth', new AuthRouter().initRoutes().get());
   app.use(new HttpErrorHandler().get());
 
