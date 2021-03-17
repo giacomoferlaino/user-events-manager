@@ -26,9 +26,9 @@ export class Event {
       object['id'] || 0,
       object['headline'] || '',
       object['description'] || '',
-      (object['startDate'] = new Date(0)),
+      object['startDate'] || new Date(0),
       object['location'] || '',
-      (object['state'] = EventStates.Private),
+      object['state'] || EventStates.Private,
     );
   }
 

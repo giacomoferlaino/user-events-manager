@@ -1,0 +1,38 @@
+GET http://localhost:8080/event HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VySUQiOjF9.mRTZ7R4Klaok23JbdAHBKJHvlfngPlm_SAr7ufrT8c4
+
+###
+
+POST http://localhost:8080/event/ HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VySUQiOjF9.mRTZ7R4Klaok23JbdAHBKJHvlfngPlm_SAr7ufrT8c4
+
+
+{
+  "headline": "New event",
+  "location": "Milan",
+  "state": "public"
+}
+
+###
+
+GET http://localhost:8080/event/1 HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VySUQiOjF9.mRTZ7R4Klaok23JbdAHBKJHvlfngPlm_SAr7ufrT8c4
+
+###
+
+PUT http://localhost:8080/event/1 HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VySUQiOjF9.mRTZ7R4Klaok23JbdAHBKJHvlfngPlm_SAr7ufrT8c4
+
+{
+  "username": "changedUser"
+}
+
+###
+
+DELETE http://localhost:8080/event/2
+Content-Type: application/json
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VySUQiOjF9.mRTZ7R4Klaok23JbdAHBKJHvlfngPlm_SAr7ufrT8c4
