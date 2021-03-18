@@ -4,6 +4,7 @@ import { UserController } from './user-controller';
 import { JsonHandler } from '../shared/http/json-handler';
 
 export class UserRouter implements Router {
+  private static ID_PARAM: string = 'id';
   private readonly _router: express.Router = express.Router();
   private readonly _userController: UserController;
 
@@ -20,22 +21,27 @@ export class UserRouter implements Router {
       '/',
       new JsonHandler(this._userController.findAll()).get(),
     );
+
     this._router.post(
       '/',
       new JsonHandler(this._userController.create()).get(),
     );
+
     this._router.get(
       '/:id',
-      new JsonHandler(this._userController.findOne()).get(),
+      new JsonHandler(this._userController.findOne(UserRouter.ID_PARAM)).get(),
     );
+
     this._router.put(
       '/:id',
-      new JsonHandler(this._userController.update()).get(),
+      new JsonHandler(this._userController.update(UserRouter.ID_PARAM)).get(),
     );
+
     this._router.delete(
       '/:id',
-      new JsonHandler(this._userController.remove()).get(),
+      new JsonHandler(this._userController.remove(UserRouter.ID_PARAM)).get(),
     );
+
     return this;
   }
 }

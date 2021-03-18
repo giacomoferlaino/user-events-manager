@@ -20,10 +20,12 @@ export class AuthRouter implements Router {
       '/login',
       new JsonHandler(this._authController.login()).get(),
     );
+
     this._router.post(
       '/signup',
       new JsonHandler(this._authController.signUp()).get(),
     );
+
     return this;
   }
 }

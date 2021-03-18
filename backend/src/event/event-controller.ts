@@ -4,12 +4,7 @@ import { ControllerHandler } from '../shared/http/types/controller-handler';
 import { Event } from './event';
 import { RequestContext } from '../shared/http/interfaces/request-context';
 import { User } from '../user/user';
-import { EventsLimitException } from './exceptions/events-limit-exception';
-import { UnauthorizedUserException } from '../auth/exceptions/unauthorized-user-exception';
-import { AlreadySubscribedException } from './exceptions/already-subscribed-exception';
 import { UserService } from '../user/user-service';
-import { EventOwnerException } from './exceptions/event-owner-exception';
-import { SubscriptionsLimitException } from './exceptions/subscriptions-limit-exception';
 
 export class EventController {
   private readonly _eventService: EventService;
@@ -24,9 +19,9 @@ export class EventController {
     ) as UserService;
   }
 
-  public findOne(): ControllerHandler<Event> {
+  public findOne(idParam: string): ControllerHandler<Event> {
     return (context: RequestContext) => {
-      const eventID: number = parseInt(context.req.params['id']);
+      const eventID: number = parseInt(context.req.params[idParam]);
       return this._eventService.findByID(eventID);
     };
   }
@@ -39,8 +34,6 @@ export class EventController {
 
   public create(): ControllerHandler<Event> {
     return (context: RequestContext) => {
-      const user = context.req.user as User;
-      if (user.hasReachedEventsLimit()) throw new EventsLimitException();
       const eventData: any = context.req.body;
       eventData.author = context.req.user;
       const event: Event = Event.fromObject(eventData);
@@ -48,36 +41,31 @@ export class EventController {
     };
   }
 
-  public update(): ControllerHandler<Event> {
+  public update(idParam: string): ControllerHandler<Event> {
     return (context: RequestContext) => {
-      const eventID: number = parseInt(context.req.params['id']);
-      const user = context.req.user as User;
-      if (!user.isEventOwner(eventID)) throw new UnauthorizedUserException();
+      const eventID: number = parseInt(context.req.params[idParam]);
       const eventData: number = context.req.body;
       const updatedEvent: Event = Event.fromObject(eventData);
       return this._eventService.updateByID(eventID, updatedEvent);
     };
   }
-  public remove(): ControllerHandler<void> {
-    return (context: RequestContext) => {
-      const eventID: number = parseInt(context.req.params['id']);
-      const user = context.req.user as User;
-      if (!user.isEventOwner(eventID)) throw new UnauthorizedUserException();
-      return this._eventService.removeByID(eventID);
+
+  public remove(idParam: string): ControllerHandler<Event[]> {
+    return async (context: RequestContext) => {
+      const eventID: number = parseInt(context.req.params[idParam]);
+      await this._eventService.removeByID(eventID);
+      return [];
     };
   }
 
-  public subscribe(): ControllerHandler<void> {
+  public subscribe(idParam: string): ControllerHandler<Event[]> {
     return async (context: RequestContext) => {
-      const eventID: number = parseInt(context.req.params['id']);
+      const eventID: number = parseInt(context.req.params[idParam]);
       const user = context.req.user as User;
-      if (user.isSubscribed(eventID)) throw new AlreadySubscribedException();
-      if (user.isEventOwner(eventID)) throw new EventOwnerException();
-      if (user.hasReachedSubscriptionsLimit())
-        throw new SubscriptionsLimitException();
       const event = await this._eventService.findByID(eventID);
       user.subscribe(event);
       await this._userService.updateByID(user.id, user);
+      return [];
     };
   }
 }

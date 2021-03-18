@@ -36,7 +36,7 @@ export class AuthController {
   }
 
   public signUp(): ControllerHandler<User> {
-    return async (context: RequestContext) => {
+    return (context: RequestContext) => {
       const email: string = context.req.body['email'];
       const password: string = context.req.body['password'];
       const user = User.fromObject({ email, password });

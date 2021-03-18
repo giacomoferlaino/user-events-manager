@@ -13,9 +13,9 @@ export class UserController {
     ) as UserService;
   }
 
-  public findOne(): ControllerHandler<User> {
+  public findOne(idParam: string): ControllerHandler<User> {
     return (context: RequestContext) => {
-      const userID: number = parseInt(context.req.params['id']);
+      const userID: number = parseInt(context.req.params[idParam]);
       return this._userService.findByID(userID);
     };
   }
@@ -34,18 +34,19 @@ export class UserController {
     };
   }
 
-  public update(): ControllerHandler<User> {
+  public update(idParam: string): ControllerHandler<User> {
     return (context: RequestContext) => {
-      const userID: number = parseInt(context.req.params['id']);
+      const userID: number = parseInt(context.req.params[idParam]);
       const userData: number = context.req.body;
       const user: User = User.fromObject(userData);
       return this._userService.updateByID(userID, user);
     };
   }
-  public remove(): ControllerHandler<void> {
-    return (context: RequestContext) => {
-      const userID: number = parseInt(context.req.params['id']);
-      return this._userService.removeByID(userID);
+  public remove(idParam: string): ControllerHandler<User[]> {
+    return async (context: RequestContext) => {
+      const userID: number = parseInt(context.req.params[idParam]);
+      await this._userService.removeByID(userID);
+      return [];
     };
   }
 }
