@@ -1,6 +1,27 @@
 version: "3.9"
 
 services:
+#  backend:
+#    image: node:14.16.0-alpine3.13
+#    command: node /usr/app/dist/main.js
+#    restart: on-failure
+#    environment:
+#      DB_HOST: database
+#    volumes:
+#      - ./backend/dist:/usr/app/dist
+#      - ./backend/node_modules:/usr/app/node_modules
+#    ports:
+#      - 8080:8080
+  node_swagger:
+    image: swaggerapi/swagger-editor
+    restart: on-failure
+    environment:
+      SWAGGER_FILE: /tmp/swagger.yml
+    volumes:
+      - ./swagger:/tmp:ro
+    ports:
+      - 3000:8080
+
   database:
     image: mysql
     command: --default-authentication-plugin=mysql_native_password
