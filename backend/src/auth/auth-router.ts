@@ -21,13 +21,13 @@ export class AuthRouter implements Router {
   public initRoutes(): Router {
     this._router.post(
       '/login',
-      new JsonHandler(ValidationMiddleware.validateBody(new LoginDto())).get(),
+      new JsonHandler(ValidationMiddleware.validateBody(LoginDto)).get(),
       new JsonHandler(this._authController.login()).get(),
     );
 
     this._router.post(
       '/signup',
-      new JsonHandler(ValidationMiddleware.validateBody(new SignUpDto())).get(),
+      new JsonHandler(ValidationMiddleware.validateBody(SignUpDto)).get(),
       new JsonHandler(this._authController.signUp()).get(),
     );
 

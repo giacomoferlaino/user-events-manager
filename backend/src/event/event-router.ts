@@ -30,9 +30,7 @@ export class EventRouter implements Router {
       '/',
       JwtAuthStrategy.instance.authenticate(),
       new JsonHandler(EventMiddleware.denyOnCreationLimit()).get(),
-      new JsonHandler(
-        ValidationMiddleware.validateBody(new CreateEventDto()),
-      ).get(),
+      new JsonHandler(ValidationMiddleware.validateBody(CreateEventDto)).get(),
       new JsonHandler(this._eventController.create()).get(),
     );
 
@@ -64,9 +62,7 @@ export class EventRouter implements Router {
       new JsonHandler(
         EventMiddleware.allowOnlyOwner(EventRouter.ID_PARAM),
       ).get(),
-      new JsonHandler(
-        ValidationMiddleware.validateBody(new CreateEventDto()),
-      ).get(),
+      new JsonHandler(ValidationMiddleware.validateBody(CreateEventDto)).get(),
       new JsonHandler(this._eventController.update(EventRouter.ID_PARAM)).get(),
     );
 

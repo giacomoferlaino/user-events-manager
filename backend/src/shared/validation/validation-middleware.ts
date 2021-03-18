@@ -3,6 +3,7 @@ import { RequestContext } from '../http/interfaces/request-context';
 import { DataTransferObject } from './data-transfer-object';
 import { validateOrReject, ValidatorOptions } from 'class-validator';
 import { ValidationException } from './validation-exception';
+import { plainToClass } from 'class-transformer';
 
 export class ValidationMiddleware {
   private static OPTIONS: ValidatorOptions = {
@@ -11,12 +12,13 @@ export class ValidationMiddleware {
   };
 
   public static validateBody(
-    target: DataTransferObject,
+    targetType: typeof DataTransferObject,
   ): MiddlewareHandler<void> {
     return async (context: RequestContext) => {
-      target.populateFromObject(context.req.body);
+      const requestObject = plainToClass(targetType, context.req.body);
       try {
-        await validateOrReject(target, ValidationMiddleware.OPTIONS);
+        await validateOrReject(requestObject, ValidationMiddleware.OPTIONS);
+        context.req.body = requestObject;
       } catch (errors) {
         let errorMessage = '';
         for (const err of errors) {

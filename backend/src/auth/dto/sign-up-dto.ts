@@ -5,9 +5,4 @@ export class SignUpDto extends LoginDto {
   @IsNotEmpty()
   @IsString()
   username!: string;
-
-  populateFromObject(source: any) {
-    super.populateFromObject(source);
-    this.username = source['username'];
-  }
 }

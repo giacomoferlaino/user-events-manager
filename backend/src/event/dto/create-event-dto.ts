@@ -1,9 +1,8 @@
-import { DataTransferObject } from '../../shared/validation/data-transfer-object';
 import { EventStates } from '../event-states';
 import { IsDate, IsEnum, IsNotEmpty, IsString } from 'class-validator';
-import { User } from '../../user/user';
+import { Type } from 'class-transformer';
 
-export class CreateEventDto implements DataTransferObject {
+export class CreateEventDto {
   @IsNotEmpty()
   @IsString()
   headline!: string;
@@ -14,6 +13,7 @@ export class CreateEventDto implements DataTransferObject {
 
   @IsNotEmpty()
   @IsDate()
+  @Type(() => Date)
   startDate!: Date;
 
   @IsNotEmpty()
@@ -23,14 +23,4 @@ export class CreateEventDto implements DataTransferObject {
   @IsNotEmpty()
   @IsEnum(EventStates)
   state!: EventStates;
-
-  author!: User;
-
-  populateFromObject(source: any) {
-    this.headline = source['headline'];
-    this.description = source['description'];
-    this.startDate = new Date(source['startDate']);
-    this.location = source['location'];
-    this.state = source['state'];
-  }
 }

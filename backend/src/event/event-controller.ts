@@ -37,8 +37,10 @@ export class EventController {
     return (context: RequestContext) => {
       const currentUser = context.req.user as User;
       const eventData: CreateEventDto = context.req.body;
-      eventData.author = currentUser;
-      const event: Event = Event.fromObject(eventData);
+      const event: Event = Event.fromObject({
+        ...eventData,
+        author: currentUser,
+      });
       return this._eventService.create(event);
     };
   }
