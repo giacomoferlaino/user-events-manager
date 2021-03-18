@@ -1,5 +1,6 @@
 import 'reflect-metadata'; // needed for TypeORM to work
 import express, { Express } from 'express';
+import cors from 'cors';
 import { Environment } from './shared/environment/environment';
 import { UserRouter } from './user/user-router';
 import bodyParser from 'body-parser';
@@ -26,6 +27,9 @@ async function main(): Promise<void> {
 
   const PORT: number = Environment.processPort();
   const app: Express = express();
+
+  // enables all cors requests
+  app.use(cors());
 
   // parse application/x-www-form-urlencoded
   app.use(bodyParser.urlencoded({ extended: false }));
