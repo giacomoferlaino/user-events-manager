@@ -24,10 +24,8 @@ export class AuthController {
   public login(): ControllerHandler<AuthData> {
     return async (context: RequestContext) => {
       const reqBody = context.req.body as LoginDto;
-      const email: string = reqBody['email'];
-      const password: string = reqBody['password'];
-      const user = await this._userService.findByEmail(email);
-      if (!user.comparePassword(password))
+      const user = await this._userService.findByEmail(reqBody.email);
+      if (!user.comparePassword(reqBody.password))
         throw new InvalidCredentialsException();
       const payload: JwtPayload = {
         userID: user.id,
@@ -41,9 +39,7 @@ export class AuthController {
   public signUp(): ControllerHandler<User> {
     return (context: RequestContext) => {
       const reqBody = context.req.body as SignUpDto;
-      const email: string = reqBody['email'];
-      const password: string = reqBody['password'];
-      const user = User.fromObject({ email, password });
+      const user = User.fromObject({ ...reqBody });
       return this._userService.create(user);
     };
   }
