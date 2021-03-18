@@ -9,6 +9,8 @@ import { ServiceLocator } from '../shared/service-locator/service-locator';
 import { InvalidCredentialsException } from './exceptions/invalid-credentials-exception';
 import { User } from '../user/user';
 import { JwtAuthStrategy } from './strategies/jwt-auth-strategy';
+import { SignUpDto } from './dto/sign-up-dto';
+import { LoginDto } from './dto/login-dto';
 
 export class AuthController {
   private readonly _userService: UserService;
@@ -21,8 +23,9 @@ export class AuthController {
 
   public login(): ControllerHandler<AuthData> {
     return async (context: RequestContext) => {
-      const email: string = context.req.body['email'];
-      const password: string = context.req.body['password'];
+      const reqBody = context.req.body as LoginDto;
+      const email: string = reqBody['email'];
+      const password: string = reqBody['password'];
       const user = await this._userService.findByEmail(email);
       if (!user.comparePassword(password))
         throw new InvalidCredentialsException();
@@ -37,8 +40,9 @@ export class AuthController {
 
   public signUp(): ControllerHandler<User> {
     return (context: RequestContext) => {
-      const email: string = context.req.body['email'];
-      const password: string = context.req.body['password'];
+      const reqBody = context.req.body as SignUpDto;
+      const email: string = reqBody['email'];
+      const password: string = reqBody['password'];
       const user = User.fromObject({ email, password });
       return this._userService.create(user);
     };

@@ -1,3 +1,3 @@
-export interface DataTransferObject<T extends object> {
-  fromObject(source: any): T;
+export interface DataTransferObject {
+  populateFromObject(source: any): void;
 }

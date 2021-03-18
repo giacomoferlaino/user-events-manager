@@ -10,13 +10,13 @@ export class ValidationMiddleware {
     forbidUnknownValues: true,
   };
 
-  public static validateBody<T extends object>(
-    target: DataTransferObject<T>,
+  public static validateBody(
+    target: DataTransferObject,
   ): MiddlewareHandler<void> {
     return async (context: RequestContext) => {
-      const dto = target.fromObject(context.req.body);
+      target.populateFromObject(context.req.body);
       try {
-        await validateOrReject(dto, ValidationMiddleware.OPTIONS);
+        await validateOrReject(target, ValidationMiddleware.OPTIONS);
       } catch (errors) {
         let errorMessage = '';
         for (const err of errors) {
