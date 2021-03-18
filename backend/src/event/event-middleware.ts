@@ -48,7 +48,7 @@ export class EventMiddleware {
     return (context: RequestContext) => {
       const eventID: number = parseInt(context.req.params[idParam]);
       const user = context.req.user as User;
-      if (user.isEventOwner(eventID)) throw new UnauthorizedUserException();
+      if (!user.isEventOwner(eventID)) throw new UnauthorizedUserException();
     };
   }
 }
