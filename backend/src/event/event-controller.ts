@@ -5,6 +5,7 @@ import { Event } from './event';
 import { RequestContext } from '../shared/http/interfaces/request-context';
 import { User } from '../user/user';
 import { UserService } from '../user/user-service';
+import { CreateEventDto } from './dto/create-event-dto';
 
 export class EventController {
   private readonly _eventService: EventService;
@@ -34,8 +35,9 @@ export class EventController {
 
   public create(): ControllerHandler<Event> {
     return (context: RequestContext) => {
-      const eventData: any = context.req.body;
-      eventData.author = context.req.user;
+      const currentUser = context.req.user as User;
+      const eventData: CreateEventDto = context.req.body;
+      eventData.author = currentUser;
       const event: Event = Event.fromObject(eventData);
       return this._eventService.create(event);
     };
@@ -44,7 +46,7 @@ export class EventController {
   public update(idParam: string): ControllerHandler<Event> {
     return (context: RequestContext) => {
       const eventID: number = parseInt(context.req.params[idParam]);
-      const eventData: number = context.req.body;
+      const eventData: CreateEventDto = context.req.body;
       const updatedEvent: Event = Event.fromObject(eventData);
       return this._eventService.updateByID(eventID, updatedEvent);
     };

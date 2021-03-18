@@ -4,6 +4,8 @@ import { EventController } from './event-controller';
 import { JsonHandler } from '../shared/http/json-handler';
 import { JwtAuthStrategy } from '../auth/strategies/jwt-auth-strategy';
 import { EventMiddleware } from './event-middleware';
+import { ValidationMiddleware } from '../shared/validation/validation-middleware';
+import { CreateEventDto } from './dto/create-event-dto';
 
 export class EventRouter implements Router {
   private static ID_PARAM: string = 'id';
@@ -28,6 +30,9 @@ export class EventRouter implements Router {
       '/',
       JwtAuthStrategy.instance.authenticate(),
       new JsonHandler(EventMiddleware.denyOnCreationLimit()).get(),
+      new JsonHandler(
+        ValidationMiddleware.validateBody(new CreateEventDto()),
+      ).get(),
       new JsonHandler(this._eventController.create()).get(),
     );
 
@@ -58,6 +63,9 @@ export class EventRouter implements Router {
       JwtAuthStrategy.instance.authenticate(),
       new JsonHandler(
         EventMiddleware.allowOnlyOwner(EventRouter.ID_PARAM),
+      ).get(),
+      new JsonHandler(
+        ValidationMiddleware.validateBody(new CreateEventDto()),
       ).get(),
       new JsonHandler(this._eventController.update(EventRouter.ID_PARAM)).get(),
     );
