@@ -2,6 +2,8 @@ import express from 'express';
 import { Router } from '../shared/router';
 import { UserController } from './user-controller';
 import { JsonHandler } from '../shared/http/json-handler';
+import { ValidationMiddleware } from '../shared/validation/validation-middleware';
+import { CreateUserDto } from './dto/create-user-dto';
 
 export class UserRouter implements Router {
   private static ID_PARAM: string = 'id';
@@ -24,6 +26,9 @@ export class UserRouter implements Router {
 
     this._router.post(
       '/',
+      new JsonHandler(
+        ValidationMiddleware.validateBody(new CreateUserDto()),
+      ).get(),
       new JsonHandler(this._userController.create()).get(),
     );
 
@@ -34,6 +39,9 @@ export class UserRouter implements Router {
 
     this._router.put(
       '/:id',
+      new JsonHandler(
+        ValidationMiddleware.validateBody(new CreateUserDto()),
+      ).get(),
       new JsonHandler(this._userController.update(UserRouter.ID_PARAM)).get(),
     );
 

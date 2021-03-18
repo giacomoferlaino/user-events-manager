@@ -16,10 +16,10 @@ export class User {
   @PrimaryGeneratedColumn()
   public readonly id: number;
 
-  @Column()
+  @Column({ unique: true })
   public readonly username: string;
 
-  @Column()
+  @Column({ unique: true })
   public readonly email: string;
 
   @Column()
@@ -61,12 +61,12 @@ export class User {
 
   public mergeIn(user: User): User {
     return new User(
-      this.id,
+      this.id, // id should be preserved
       user.username,
       user.email,
       user.password,
-      user.events,
-      user.subscribedEvents,
+      this.events, // relationship field is left out during merge
+      this.subscribedEvents, // relationship field is left out during merge
     );
   }
 

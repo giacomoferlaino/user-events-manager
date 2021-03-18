@@ -69,14 +69,14 @@ export class Event {
 
   public mergeIn(event: Event): Event {
     return new Event(
-      this.id,
+      this.id, // id should be preserved
       event.headline,
       event.description,
       event.startDate,
       event.location,
       event.state,
-      event.author,
-      event.subscribers,
+      this.author, // relationship field left ou during merge
+      this.subscribers, // relationship field left ou during merge
     );
   }
 
