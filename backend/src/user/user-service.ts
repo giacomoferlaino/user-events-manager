@@ -16,8 +16,9 @@ export class UserService implements Service {
     return UserService.ID;
   }
 
-  public async create(user: User) {
-    return this._userRepository.save(user);
+  public async create(userData: Object) {
+    const newUser = User.fromObject(userData);
+    return this._userRepository.save(newUser);
   }
 
   public async findByID(
@@ -44,9 +45,9 @@ export class UserService implements Service {
     return this._userRepository.find({ relations });
   }
 
-  public async updateByID(id: number, user: User): Promise<User> {
-    const existingUser = await this.findByID(id); // checks if user exists
-    const updatedUser = existingUser.mergeIn(user);
+  public async updateByID(id: number, userData: Object): Promise<User> {
+    const existingUser = await this.findByID(id);
+    const updatedUser = existingUser.mergeObject(userData);
     return this._userRepository.save(updatedUser);
   }
 

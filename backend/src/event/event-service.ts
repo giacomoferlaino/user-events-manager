@@ -3,6 +3,7 @@ import { Connection, Repository } from 'typeorm';
 import { EventRepository } from './event-repository';
 import { Event } from './event';
 import { EventNotFoundException } from './exceptions/event-not-found-exception';
+import { User } from '../user/user';
 
 export class EventService implements Service {
   public static ID: string = 'EVENT_SERVICE';
@@ -16,8 +17,10 @@ export class EventService implements Service {
     return EventService.ID;
   }
 
-  public async create(event: Event) {
-    return this._eventRepository.save(event);
+  public async create(eventData: Object, author: User) {
+    const newEvent = Event.fromObject(eventData);
+    newEvent.setAuthor(author);
+    return this._eventRepository.save(newEvent);
   }
 
   public async findByID(
@@ -35,9 +38,9 @@ export class EventService implements Service {
     return this._eventRepository.find({ relations });
   }
 
-  public async updateByID(id: number, event: Event): Promise<Event> {
-    const existingEvent = await this.findByID(id); // checks if event exists
-    const updatedEvent = existingEvent.mergeIn(event);
+  public async updateByID(id: number, eventData: Object): Promise<Event> {
+    const existingEvent = await this.findByID(id);
+    const updatedEvent = existingEvent.mergeObject(eventData);
     return this._eventRepository.save(updatedEvent);
   }
 

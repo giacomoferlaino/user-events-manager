@@ -17,19 +17,19 @@ export class Event {
   public readonly headline: string;
 
   @Column('text')
-  public readonly description: string;
+  public description: string;
 
   @Column()
-  public readonly startDate: Date;
+  public startDate: Date;
 
   @Column()
-  public readonly location: string;
+  public location: string;
 
   @Column('varchar', { length: 20 })
   public readonly state: EventStates;
 
   @ManyToOne((_) => User, (user) => user.events)
-  public readonly author: User;
+  public author: User;
 
   @ManyToMany((_) => User, (user) => user.subscribedEvents)
   public readonly subscribers: User[];
@@ -67,17 +67,16 @@ export class Event {
     this.subscribers = subscribers;
   }
 
-  public mergeIn(event: Event): Event {
-    return new Event(
-      this.id, // id should be preserved
-      event.headline,
-      event.description,
-      event.startDate,
-      event.location,
-      event.state,
-      this.author, // relationship field left ou during merge
-      this.subscribers, // relationship field left ou during merge
-    );
+  public setAuthor(author: User) {
+    this.author = author;
+  }
+
+  public mergeObject(object: any): Event {
+    return Event.fromObject({
+      ...this.toObject(),
+      ...object,
+      id: this.id, // preserving existing id
+    });
   }
 
   public toObject(): any {

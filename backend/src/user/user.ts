@@ -17,13 +17,13 @@ export class User {
   public readonly id: number;
 
   @Column({ unique: true })
-  public readonly username: string;
+  public username: string;
 
   @Column({ unique: true })
-  public readonly email: string;
+  public email: string;
 
   @Column()
-  public readonly password: string;
+  public password: string;
 
   @OneToMany((_) => Event, (event) => event.author)
   public readonly events: Event[];
@@ -59,15 +59,12 @@ export class User {
     this.subscribedEvents = subscribedEvents;
   }
 
-  public mergeIn(user: User): User {
-    return new User(
-      this.id, // id should be preserved
-      user.username,
-      user.email,
-      user.password,
-      this.events, // relationship field is left out during merge
-      this.subscribedEvents, // relationship field is left out during merge
-    );
+  public mergeObject(object: any): User {
+    return User.fromObject({
+      ...this.toObject(),
+      ...object,
+      id: this.id, // preserving existing id
+    });
   }
 
   public comparePassword(password: string): boolean {

@@ -37,11 +37,7 @@ export class EventController {
     return (context: RequestContext) => {
       const currentUser = context.req.user as User;
       const eventData: CreateEventDto = context.req.body;
-      const event: Event = Event.fromObject({
-        ...eventData,
-        author: currentUser,
-      });
-      return this._eventService.create(event);
+      return this._eventService.create(eventData, currentUser);
     };
   }
 
@@ -49,8 +45,7 @@ export class EventController {
     return (context: RequestContext) => {
       const eventID: number = parseInt(context.req.params[idParam]);
       const eventData: CreateEventDto = context.req.body;
-      const updatedEvent: Event = Event.fromObject(eventData);
-      return this._eventService.updateByID(eventID, updatedEvent);
+      return this._eventService.updateByID(eventID, eventData);
     };
   }
 

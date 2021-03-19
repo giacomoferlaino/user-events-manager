@@ -3,6 +3,7 @@ import { ServiceLocator } from '../shared/service-locator/service-locator';
 import { User } from './user';
 import { RequestContext } from '../shared/http/interfaces/request-context';
 import { ControllerHandler } from '../shared/http/types/controller-handler';
+import { CreateUserDto } from './dto/create-user-dto';
 
 export class UserController {
   private readonly _userService: UserService;
@@ -28,18 +29,16 @@ export class UserController {
 
   public create(): ControllerHandler<User> {
     return (context: RequestContext) => {
-      const userData: number = context.req.body;
-      const user: User = User.fromObject(userData);
-      return this._userService.create(user);
+      const userData: CreateUserDto = context.req.body;
+      return this._userService.create(userData);
     };
   }
 
   public update(idParam: string): ControllerHandler<User> {
     return (context: RequestContext) => {
       const userID: number = parseInt(context.req.params[idParam]);
-      const userData: number = context.req.body;
-      const user: User = User.fromObject(userData);
-      return this._userService.updateByID(userID, user);
+      const userData: CreateUserDto = context.req.body;
+      return this._userService.updateByID(userID, userData);
     };
   }
   public remove(idParam: string): ControllerHandler<User[]> {
