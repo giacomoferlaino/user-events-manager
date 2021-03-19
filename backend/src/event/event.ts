@@ -26,7 +26,10 @@ export class Event {
   public location: string;
 
   @Column('varchar', { length: 20 })
-  public readonly state: EventStates;
+  public state: EventStates;
+
+  @Column()
+  public hasBeenNotified: boolean;
 
   @ManyToOne((_) => User, (user) => user.events)
   public author: User;
@@ -56,6 +59,7 @@ export class Event {
     state: EventStates,
     author: User,
     subscribers: User[],
+    hasBeenNotified: boolean = false,
   ) {
     this.id = id;
     this.headline = headline;
@@ -65,10 +69,15 @@ export class Event {
     this.state = state;
     this.author = author;
     this.subscribers = subscribers;
+    this.hasBeenNotified = hasBeenNotified;
   }
 
   public setAuthor(author: User) {
     this.author = author;
+  }
+
+  public setNotified(): void {
+    this.hasBeenNotified = true;
   }
 
   public mergeObject(object: any): Event {
@@ -87,6 +96,7 @@ export class Event {
       startDate: this.startDate,
       location: this.location,
       state: this.state,
+      hasBeenNotified: this.hasBeenNotified,
       author: this.author,
       subscribers: this.subscribers,
     };
