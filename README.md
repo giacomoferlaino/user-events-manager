@@ -2,6 +2,13 @@
 Simple event manager application where some users can create and post their events and other users can subscribe to them
 to receive notifications.
 
+## How to run it
+Use the following command to run the application using docker-compose:
+````shell
+dockdocker-compose -f docker-compose.yml -f docker-compose.prod.yml up --build
+````
+This will build the frontend and the backend and start the Swagger and MySQL services.
+
 ## Services
 
 - REST API server on port:  **8080**
@@ -49,10 +56,11 @@ In case a browser doesn't support the WebSocket protocol, the server will fall b
 To be able to scale, the system would need a reverse-proxy with stateful routing to prevent the possibility
 of a client connecting to the wrong NodeJS process.
 
-# UI for backend testing
+## UI for backend testing
 To test backend APIs a swagger service is available that contains the APIs definition with data samples.
 To test the event notifications using WebSocket the Angular client can be used.
 
 Once the page is loaded, there will be an input bar at the top where to pur the JWT token to authenticate the socket connection.
 
 By leaving the page open, it will receive the notifications related to the authenticated user.
+
