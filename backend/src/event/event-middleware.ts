@@ -1,7 +1,7 @@
 import { RequestContext } from '../shared/http/interfaces/request-context';
 import { User } from '../user/user';
 import { AlreadySubscribedException } from './exceptions/already-subscribed-exception';
-import { MiddlewareHandler } from '../shared/http/types/middleware-handler';
+import { HttpMiddleware } from '../shared/http/types/http-middleware';
 import { EventOwnerException } from './exceptions/event-owner-exception';
 import { EventsSubscriptionLimitException } from './exceptions/events-subscription-limit-exception';
 import { UnauthorizedUserException } from '../auth/exceptions/unauthorized-user-exception';
@@ -10,7 +10,7 @@ import { EventsCreationLimitException } from './exceptions/events-creation-limit
 export class EventMiddleware {
   public static denyDuplicateSubscription(
     idParam: string,
-  ): MiddlewareHandler<void> {
+  ): HttpMiddleware<void> {
     return (context: RequestContext) => {
       const eventID: number = parseInt(context.req.params[idParam]);
       const user = context.req.user as User;
@@ -18,9 +18,7 @@ export class EventMiddleware {
     };
   }
 
-  public static denyOwnerSubscription(
-    idParam: string,
-  ): MiddlewareHandler<void> {
+  public static denyOwnerSubscription(idParam: string): HttpMiddleware<void> {
     return (context: RequestContext) => {
       const eventID: number = parseInt(context.req.params[idParam]);
       const user = context.req.user as User;
@@ -28,7 +26,7 @@ export class EventMiddleware {
     };
   }
 
-  public static denyOnSubscriptionLimit(): MiddlewareHandler<void> {
+  public static denyOnSubscriptionLimit(): HttpMiddleware<void> {
     return (context: RequestContext) => {
       const user = context.req.user as User;
       if (user.hasReachedSubscriptionsLimit())
@@ -36,7 +34,7 @@ export class EventMiddleware {
     };
   }
 
-  public static denyOnCreationLimit(): MiddlewareHandler<void> {
+  public static denyOnCreationLimit(): HttpMiddleware<void> {
     return (context: RequestContext) => {
       const user = context.req.user as User;
       if (user.hasReachedEventsLimit())
@@ -44,7 +42,7 @@ export class EventMiddleware {
     };
   }
 
-  public static allowOnlyOwner(idParam: string): MiddlewareHandler<void> {
+  public static allowOnlyOwner(idParam: string): HttpMiddleware<void> {
     return (context: RequestContext) => {
       const eventID: number = parseInt(context.req.params[idParam]);
       const user = context.req.user as User;

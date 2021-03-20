@@ -23,9 +23,9 @@ export class ServiceLocator {
     this._services.set(service.getID(), service);
   }
 
-  public get(serviceID: string): Service {
+  public get<T extends Service>(serviceID: string): T {
     if (!this._services.has(serviceID))
       throw new UnregisteredServiceException(serviceID);
-    return this._services.get(serviceID) as Service;
+    return this._services.get(serviceID) as T;
   }
 }

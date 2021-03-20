@@ -19,7 +19,7 @@ export class Event {
   @Column('text')
   public description: string;
 
-  @Column()
+  @Column('datetime')
   public startDate: Date;
 
   @Column()
@@ -47,6 +47,7 @@ export class Event {
       object['state'] || EventStates.Private,
       object['author'],
       object['subscribers'] || [],
+      object['hasBeenNotified'],
     );
   }
 
@@ -80,6 +81,10 @@ export class Event {
     this.hasBeenNotified = true;
   }
 
+  public hasSubscriber(userId: number): boolean {
+    return this.subscribers.some((user: User) => userId === user.id);
+  }
+
   public mergeObject(object: any): Event {
     return Event.fromObject({
       ...this.toObject(),
@@ -104,5 +109,9 @@ export class Event {
 
   public toJSON(): any {
     return { ...this.toObject(), author: undefined, subscribers: undefined };
+  }
+
+  public toString(): string {
+    return `${this.headline} - ${this.startDate} @${this.location}`;
   }
 }

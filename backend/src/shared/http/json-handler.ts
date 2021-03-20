@@ -2,10 +2,10 @@ import { RequestContext } from './interfaces/request-context';
 import { Handler, NextFunction, Request, Response } from 'express';
 import { RequestHandler } from './interfaces/request-handler';
 import { HttpResponse } from './http-response';
-import { MiddlewareHandler } from './types/middleware-handler';
+import { HttpMiddleware } from './types/http-middleware';
 
-export class JsonHandler<T> implements RequestHandler {
-  constructor(private _callback: MiddlewareHandler<T>) {}
+export class JsonHandler<T, U> implements RequestHandler {
+  constructor(private _callback: HttpMiddleware<T>) {}
 
   public get(): Handler {
     return async (

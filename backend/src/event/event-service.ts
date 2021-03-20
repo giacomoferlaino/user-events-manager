@@ -1,9 +1,10 @@
 import { Service } from '../shared/service-locator/service';
-import { Connection, Repository } from 'typeorm';
+import { Connection, Raw, Repository } from 'typeorm';
 import { EventRepository } from './event-repository';
 import { Event } from './event';
 import { EventNotFoundException } from './exceptions/event-not-found-exception';
 import { User } from '../user/user';
+import { DateUtils } from 'typeorm/util/DateUtils';
 
 export class EventService implements Service {
   public static ID: string = 'EVENT_SERVICE';
@@ -36,6 +37,32 @@ export class EventService implements Service {
     relations = ['author', 'subscribers'],
   ): Promise<Event[]> {
     return this._eventRepository.find({ relations });
+  }
+
+  public async findToBeNotified(
+    relations = ['author', 'subscribers'],
+  ): Promise<Event[]> {
+    const today: Date = new Date(Date.now());
+    const tomorrow: Date = new Date(
+      today.getFullYear(),
+      today.getMonth(),
+      today.getDate() + 1,
+      today.getMinutes(),
+      today.getSeconds(),
+      today.getMilliseconds(),
+    );
+    const sqlFormattedDate: string = DateUtils.mixedDateToDatetimeString(
+      tomorrow,
+    );
+    return this._eventRepository.find({
+      relations,
+      where: {
+        hasBeenNotified: false,
+        startDate: Raw((alias) => `${alias} < :date`, {
+          date: sqlFormattedDate,
+        }),
+      },
+    });
   }
 
   public async updateByID(id: number, eventData: Object): Promise<Event> {

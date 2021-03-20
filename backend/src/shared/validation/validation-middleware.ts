@@ -1,4 +1,4 @@
-import { MiddlewareHandler } from '../http/types/middleware-handler';
+import { HttpMiddleware } from '../http/types/http-middleware';
 import { RequestContext } from '../http/interfaces/request-context';
 import { DataTransferObject } from './data-transfer-object';
 import { validateOrReject, ValidatorOptions } from 'class-validator';
@@ -13,7 +13,7 @@ export class ValidationMiddleware {
 
   public static validateBody(
     targetType: typeof DataTransferObject,
-  ): MiddlewareHandler<void> {
+  ): HttpMiddleware<void> {
     return async (context: RequestContext) => {
       const requestObject = plainToClass(targetType, context.req.body);
       try {
