@@ -21,7 +21,7 @@ export class Environment {
   public static jwtSecret(): string {
     if (Environment.isDev()) return Environment.developmentJwtSecret;
     const jwtSecret: string = process.env[Environment._jwtSecretVariable] || '';
-    if (!jwtSecret) throw new UndefinedJwtSecretException();
+    if (!jwtSecret) throw new UndefinedJwtSecretException(); // throws and exception to prevent the use of an unsafe key
     return jwtSecret;
   }
 
