@@ -14,8 +14,10 @@ export class AppComponent implements OnInit {
     this.notifications = [];
   }
 
-  ngOnInit() {
-    this.socketService.initSocketConnection();
+  ngOnInit() {}
+
+  onClickSubmit(data: { token: string }): void {
+    this.socketService.initSocketConnection(data.token);
     this.socketService.socket.on('eventNotification', (message: string) => {
       this.notifications.push(message);
     });

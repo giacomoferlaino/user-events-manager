@@ -14,11 +14,10 @@ export class SocketService {
     return this._socket;
   }
 
-  initSocketConnection(): void {
+  initSocketConnection(authToken: string): void {
     this._socket = io(SocketService.HOST_URL, {
       extraHeaders: {
-        Authorization:
-          'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VySUQiOjF9.mRTZ7R4Klaok23JbdAHBKJHvlfngPlm_SAr7ufrT8c4',
+        Authorization: authToken,
       },
     });
   }
