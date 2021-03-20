@@ -10,7 +10,7 @@ const wrap = (middleware: any) => (
 ) => middleware(socket.request, {}, next);
 
 export function initSocketServer(): void {
-  const PORT: number = 8081;
+  const port: number = 8081;
 
   const httpServer = createServer();
   const socketServer = new Server(httpServer, {
@@ -30,8 +30,8 @@ export function initSocketServer(): void {
     });
   });
 
-  httpServer.listen(PORT, () => {
+  httpServer.listen(port, () => {
     eventNotificationJob.start();
-    console.log(`Socket server started on port: ${PORT}`);
+    console.log(`Socket server started on port: ${port}`);
   });
 }
