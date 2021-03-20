@@ -1,5 +1,5 @@
 import { Server, RemoteSocket } from 'socket.io';
-import { SocketServerTask } from '../shared/socket/interfaces/socket-server-task';
+import { SocketServerTask } from '../shared/socket/socket-server-task';
 import { EventService } from './event-service';
 import { ServiceLocator } from '../shared/service-locator/service-locator';
 import { Event } from './event';
