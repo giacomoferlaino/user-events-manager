@@ -8,12 +8,14 @@ export class HttpErrorHandler {
     return (err: Error, req: Request, res: Response, _: NextFunction) => {
       if (err instanceof HttpException) {
         const response = new HttpResponse(undefined, err);
-        res.status(err.statusCode).json(response);
+        res.status(err.statusCode);
+        res.json(response);
         return;
       }
       console.error(err);
       const response = new HttpResponse(undefined, new HttpServerException());
-      res.status(HttpServerException.statusCode).send(response);
+      res.status(HttpServerException.statusCode);
+      res.json(response);
     };
   }
 }
