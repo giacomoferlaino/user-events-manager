@@ -1,0 +1,21 @@
+version: "3.9"
+
+services:
+  backend:
+    image: nodejs-backend
+    restart: on-failure
+    environment:
+      DB_HOST: database
+    build:
+      context: backend
+    ports:
+    - 8080:8080
+    - 8081:8081
+
+  frontend:
+    image: angular-frontend
+    restart: on-failure
+    build:
+      context: frontend
+    ports:
+      - 4200:4200

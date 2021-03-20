@@ -15,12 +15,17 @@ async function initServices(): Promise<void> {
 }
 
 async function main(): Promise<void> {
-  Environment.init(); // needed to set basic default values
-  await initServices(); // init global services
+  try {
+    Environment.init(); // needed to set basic default values
+    await initServices(); // init global services
 
-  await initAPIServer();
+    await initAPIServer();
 
-  await initSocketServer();
+    await initSocketServer();
+  } catch (err) {
+    console.log(err);
+    process.exit(1);
+  }
 }
 
 main().then();

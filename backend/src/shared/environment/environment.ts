@@ -3,7 +3,9 @@ import { UndefinedJwtSecretException } from './undefined-jwt-secret-exception';
 export class Environment {
   private static _portVariable: string = 'PORT';
   private static _jwtSecretVariable: string = 'JWT_SECRET_KEY';
+  private static _dbHostVariable: string = 'DB_HOST';
   public static defaultPort: number = 8080;
+  public static defaultDbHost: string = 'localhost';
   public static developmentJwtSecret: string = 'developmentJwtSecret';
 
   public static init(): void {
@@ -29,5 +31,10 @@ export class Environment {
 
   public static isDev(): boolean {
     return process.env['NODE_ENV'] === 'development';
+  }
+
+  public static dbHost(): string {
+    const dbHost = process.env[Environment._dbHostVariable];
+    return dbHost ? dbHost : Environment.defaultDbHost;
   }
 }
