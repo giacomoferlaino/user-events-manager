@@ -4,8 +4,8 @@ import { RequestHandler } from './interfaces/request-handler';
 import { HttpResponse } from './http-response';
 import { HttpMiddleware } from './types/http-middleware';
 
-export class JsonHandler<T, U> implements RequestHandler {
-  constructor(private _callback: HttpMiddleware<T>) {}
+export class JsonHandler<T> implements RequestHandler {
+  constructor(private _middlewareFunction: HttpMiddleware<T>) {}
 
   public get(): Handler {
     return async (
@@ -15,7 +15,7 @@ export class JsonHandler<T, U> implements RequestHandler {
     ): Promise<void> => {
       const context: RequestContext = { req, res, next };
       try {
-        const response: T = await this._callback(context);
+        const response: T = await this._middlewareFunction(context);
         if (this.hasEmptyResponse(response)) return next();
         res.json(new HttpResponse(response));
       } catch (err) {
