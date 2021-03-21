@@ -7,6 +7,7 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { User } from '../user/user';
+import { MissingAuthorException } from './exceptions/missing-author-exception';
 
 @Entity()
 export class Event {
@@ -38,6 +39,7 @@ export class Event {
   public readonly subscribers: User[];
 
   public static fromObject(object: any): Event {
+    if (!object['author']) throw new MissingAuthorException();
     return new Event(
       object['id'] || 0,
       object['headline'] || '',
@@ -45,7 +47,7 @@ export class Event {
       object['startDate'] || new Date(0),
       object['location'] || '',
       object['state'] || EventStates.Private,
-      object['author'],
+      object['author'], // author can't be no defined
       object['subscribers'] || [],
       object['hasBeenNotified'],
     );
