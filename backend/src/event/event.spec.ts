@@ -1,6 +1,5 @@
 import { EventStates } from './event-states';
 import { Event } from './event';
-import { MissingAuthorException } from './exceptions/missing-author-exception';
 
 describe('Event', () => {
   let event: Event;
@@ -50,10 +49,6 @@ describe('Event', () => {
         author: {}, // author property is mandatory
       };
       expect(Event.fromObject(eventData)).toStrictEqual(expectedEvent);
-    });
-
-    it('should throw an error if the Author property is not defined', () => {
-      expect(() => Event.fromObject({})).toThrow(MissingAuthorException);
     });
   });
 
