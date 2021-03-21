@@ -25,8 +25,10 @@ export class AuthController {
     return async (context: RequestContext) => {
       const reqBody = context.req.body as LoginDto;
       const user = await this._userService.findByEmail(reqBody.email);
-      if (!user.comparePassword(reqBody.password))
-        throw new InvalidCredentialsException();
+      const passwordMatch: boolean = await user.comparePassword(
+        reqBody.password,
+      );
+      if (!passwordMatch) throw new InvalidCredentialsException();
       const payload: JwtPayload = {
         userID: user.id,
       };
@@ -39,7 +41,7 @@ export class AuthController {
   public signUp(): ControllerHandler<User> {
     return (context: RequestContext) => {
       const reqBody = context.req.body as SignUpDto;
-      const user = User.fromObject({ ...reqBody });
+      const user = User.fromObject(reqBody);
       return this._userService.create(user);
     };
   }

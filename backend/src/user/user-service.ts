@@ -3,6 +3,7 @@ import { User } from './user';
 import { Connection, Repository } from 'typeorm';
 import { UserRepository } from './user-repository';
 import { UserNotFoundException } from './exceptions/user-not-found-exception';
+import { PasswordUtils } from '../shared/utils/password-utils';
 
 export class UserService implements Service {
   public static ID: string = 'USER_SERVICE';
@@ -16,8 +17,10 @@ export class UserService implements Service {
     return UserService.ID;
   }
 
-  public async create(userData: Object) {
-    const newUser = User.fromObject(userData);
+  public async create(userData: any) {
+    const password = userData['password'];
+    const hashedPassword = await PasswordUtils.hash(password);
+    const newUser = User.fromObject({ ...userData, password: hashedPassword });
     return this._userRepository.save(newUser);
   }
 

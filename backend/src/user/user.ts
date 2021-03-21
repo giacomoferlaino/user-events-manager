@@ -7,6 +7,7 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { Event } from '../event/event';
+import { compare } from 'bcryptjs';
 
 @Entity()
 export class User {
@@ -23,7 +24,7 @@ export class User {
   public email: string;
 
   @Column()
-  public password: string;
+  public password: string; // hashed user password
 
   @OneToMany((_) => Event, (event) => event.author)
   public readonly events: Event[];
@@ -67,8 +68,8 @@ export class User {
     });
   }
 
-  public comparePassword(password: string): boolean {
-    return this.password === password;
+  public async comparePassword(password: string): Promise<boolean> {
+    return compare(password, this.password);
   }
 
   public hasReachedEventsLimit(): boolean {
