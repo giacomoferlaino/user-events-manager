@@ -68,8 +68,8 @@ export class User {
     });
   }
 
-  public async comparePassword(password: string): Promise<boolean> {
-    return compare(password, this.password);
+  public async comparePassword(plainPassword: string): Promise<boolean> {
+    return compare(plainPassword, this.password);
   }
 
   public hasReachedEventsLimit(): boolean {

@@ -34,7 +34,7 @@ describe('Event', () => {
       expect(Event.fromObject(eventData)).toStrictEqual(event);
     });
 
-    it('should return a new event using default value if the data object is missing properties', () => {
+    it('should return a new event using default values if the data object is missing properties', () => {
       const expectedEvent = new Event(
         0,
         '',
@@ -59,14 +59,14 @@ describe('Event', () => {
         state: EventStates.Public,
       };
       const expectedEvent = new Event(
-        1,
-        'Nice event',
-        'Really interesting stuff',
-        new Date(Date.now()),
-        'Rome',
-        EventStates.Public,
-        {} as any,
-        [],
+        event.id,
+        event.headline,
+        event.description,
+        event.startDate,
+        eventUpdateData.location,
+        eventUpdateData.state,
+        event.author,
+        event.subscribers,
       );
       expect(event.mergeObject(eventUpdateData)).toStrictEqual(expectedEvent);
     });
@@ -78,14 +78,14 @@ describe('Event', () => {
         state: EventStates.Public,
       };
       const expectedEvent = new Event(
-        1,
-        'Nice event',
-        'Really interesting stuff',
-        new Date(Date.now()),
-        'Rome',
-        EventStates.Public,
-        {} as any,
-        [],
+        event.id,
+        event.headline,
+        event.description,
+        event.startDate,
+        eventUpdateData.location,
+        eventUpdateData.state,
+        event.author,
+        event.subscribers,
       );
       expect(event.mergeObject(eventUpdateData)).toStrictEqual(expectedEvent);
     });
